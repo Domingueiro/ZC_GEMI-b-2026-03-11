@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zelador Cívico · Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@400;500&family=Syne:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #f5f2ec; --accent: #1a3a5c; --muted: #8a8478; --white: #ffffff; }
+        body { background: var(--bg); color: var(--accent); font-family: 'Syne', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .portal-card { text-align: center; max-width: 400px; width: 100%; padding: 40px; background: rgba(255, 255, 255, 0.3); border-radius: 24px; backdrop-filter: blur(10px); border: 1px solid rgba(26, 58, 92, 0.05); }
+        h1 { font-family: 'DM Serif Display', serif; font-size: 42px; margin: 0; }
+        .subtitle { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); margin-bottom: 35px; text-transform: uppercase; letter-spacing: 1px; }
+        .opcoes-container { display: flex; flex-direction: column; gap: 15px; width: 100%; }
+        .input-group { display: flex; align-items: center; background: var(--white); border: 2px solid var(--accent); border-radius: 12px; overflow: hidden; }
+        .btn-trigger-cep { background: var(--accent); color: white; font-family: 'DM Mono', monospace; font-weight: bold; padding: 15px 20px; cursor: pointer; border: none; }
+        #cep-input { border: none; outline: none; font-family: 'DM Mono', monospace; font-size: 20px; width: 100%; padding: 10px 15px; background: transparent; }
+        .divisor { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); margin: 5px 0; }
+        .btn-geo-full { display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--white); color: var(--accent); border: 2px solid var(--accent); border-radius: 12px; padding: 15px; font-weight: 700; cursor: pointer; }
+    </style>
+</head>
+<body>
+<div class="portal-card">
+    <h1>Zelador Cívico</h1>
+    <div class="subtitle">Auditoria de Dados Urbanos</div>
+    <div class="opcoes-container">
+        <div class="input-group">
+            <button class="btn-trigger-cep" onclick="acessar()">CEP</button>
+            <input type="text" id="cep-input" placeholder="00000-000" maxlength="9" inputmode="numeric">
+        </div>
+        <div class="divisor">— OU —</div>
+        <button class="btn-geo-full" onclick="usarGeo()">Usar Geolocalização</button>
+    </div>
+</div>
+<script>
+    document.getElementById('cep-input').addEventListener('input', e => {
+        let v = e.target.value.replace(/\D/g,'');
+        if(v.length > 5) v = v.slice(0,5) + '-' + v.slice(5,8);
+        e.target.value = v;
+    });
+    function acessar() {
+        const cepRaw = document.getElementById('cep-input').value.replace(/\D/g,'');
+        if(cepRaw.length === 8) window.location.href = `zelador.html?cep=${cepRaw}`;
+        else alert("CEP incompleto.");
+    }
+    function usarGeo() {
+        navigator.geolocation.getCurrentPosition(
+            p => window.location.href = `zelador.html?lat=${p.coords.latitude}&lon=${p.coords.longitude}`,
+            () => alert("Erro no GPS.")
+        );
+    }
+</script>
+</body>
+</html>
