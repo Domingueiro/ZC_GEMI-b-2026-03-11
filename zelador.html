@@ -1,0 +1,11 @@
+// Script de integração automático no zelador.html
+window.onload = function() {
+    zcIniciarMapa();
+    const params = new URLSearchParams(window.location.search);
+    const cepParam = params.get('cep');
+    if (cepParam) {
+        const input = document.getElementById('zc-cep-input');
+        input.value = cepParam.replace(/\D/g, '').slice(0, 5) + '-' + cepParam.replace(/\D/g, '').slice(5, 8);
+        zcIniciarAnalise(); // Dispara automaticamente
+    }
+};
